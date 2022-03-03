@@ -2,7 +2,9 @@
 
 Support assistant to TEI's users.
 
-## Contab execution
+## Crontab execution
+
+Edit the crontab file with ```crontab -e``` and add:
 
 ```
 */15    08-17        *     * *     sh support.sh
