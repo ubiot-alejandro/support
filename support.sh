@@ -30,7 +30,6 @@ do
 	if [ $(curl -s https://raw.githubusercontent.com/ubiot-alejandro/support/main/tei.txt | grep $id | cut -d "=" -f2) -eq 01 ]; then
         
         str=$(wg)
-
         # If the VPN is connected, don't connect again
         if [ $( echo ${#str}) -ne 0 ]; then 
         
@@ -40,9 +39,7 @@ do
             uci set wireguard.@proxy[0].enable='1'
             uci commit wireguard
             /etc/init.d/wireguard restart
-
             sleep 30
-
             str=$(wg)
         fi
 
@@ -52,7 +49,6 @@ do
     else
 
         str=$(wg)
-
         # If the VPN is disconnected, don't disconnet again
         if [ $(echo ${#str}) -ne 0 ]; then
 
@@ -62,9 +58,7 @@ do
             uci set wireguard.@proxy[0].enable='0'
             uci commit wireguard
             /etc/init.d/wireguard restart
-
             sleep 30
-
             str=$(wg)
 
         fi
