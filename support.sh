@@ -9,6 +9,23 @@ str=$(wg)
 for ((i=1;i<=end;i++));
 
 do
+    # Checking if reboot required
+    if [ $(curl -s https://raw.githubusercontent.com/ubiot-alejandro/support/main/tei.txt | grep 0001 | cut -d "=" -f3) == "R" ]; then
+        # Reading hours uptime
+        if [ $(uptime | cut -d " " -f5 | cut -d ":" -f1 | cut -d "," -f1) -gt 0 ]; then
+            echo Rebooting
+            reboot
+        else 
+            # Reading minutes uptime
+            if [ $(uptime | cut -d " " -f5 | cut -d ":" -f2 | cut -d "," -f1) -gt 15 ]; then
+                echo Rebooting
+                reboot
+            else
+                Not rebooting, waiting minutes...
+            fi
+        fi
+    fi
+
     # Reading the GitHub file to know if is needed to connect/disconnect to the VPN
 	if [ $(curl -s https://raw.githubusercontent.com/ubiot-alejandro/support/main/tei.txt | grep $id | cut -d "=" -f2) -eq 01 ]; then
         
