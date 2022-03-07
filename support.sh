@@ -27,7 +27,7 @@ do
     fi
 
     # Reading the GitHub file to know if is needed to connect/disconnect to the VPN
-	if [ $(curl -s https://raw.githubusercontent.com/ubiot-alejandro/support/main/tei.txt | grep $id | cut -d "=" -f2) -eq 01 ]; then
+    if [ $(curl -s https://raw.githubusercontent.com/ubiot-alejandro/support/main/tei.txt | grep $id | cut -d "=" -f2) -eq 01 ]; then
         
         str=$(wg)
         # If the VPN is connected, don't connect again
