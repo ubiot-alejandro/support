@@ -5,7 +5,7 @@ id=0001
 str=$(wg)
 
 # Checking if reboot required
-if [ $(curl -s https://raw.githubusercontent.com/ubiot-alejandro/support/main/tei.txt | grep 0001 | cut -d "=" -f3) == "R" ]; then
+if [ $(curl -s https://raw.githubusercontent.com/ubiot-alejandro/support/main/tei.txt | grep $id | cut -d "=" -f3) == "R" ]; then
     # Reading hours uptime
     if [ $(uptime | cut -d " " -f5 | cut -d ":" -f1 | cut -d "," -f1) -gt 0 ]; then
         echo Rebooting
