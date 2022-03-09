@@ -1,22 +1,31 @@
 #!/bin/bash
 
 # Variables
-id=0001
+id=0000
 str=$(wg)
 
 # Checking if reboot required
 if [ $(curl -s https://raw.githubusercontent.com/ubiot-alejandro/support/main/tei.txt | grep $id | cut -d "=" -f3) == "R" ]; then
-    # Reading hours uptime
-    if [ $(uptime | cut -d " " -f5 | cut -d ":" -f1 | cut -d "," -f1) -gt 0 ]; then
-        echo Rebooting
+    # Reading days uptime
+    d=$(uptime | awk -F'( |,|:)+' '{d=h=m=0; if ($7=="min") m=$6; else {if ($7~/^day/) {d=$6;h=$8;m=$9} else {h=$6;m=$7}}} {print d+0,"days,",h+0,"hours,",m+0,"minutes."}' | cut -d "," -f1 | cut -d " " -f1)
+    if [ $d -gt 0 ]; then
+        echo Rebooting by days
         reboot
     else 
-        # Reading minutes uptime
-        if [ $(uptime | cut -d " " -f5 | cut -d ":" -f2 | cut -d "," -f1) -gt 15 ]; then
-            echo Rebooting
+        # Reading hours uptime
+        h=$(uptime | awk -F'( |,|:)+' '{d=h=m=0; if ($7=="min") m=$6; else {if ($7~/^day/) {d=$6;h=$8;m=$9} else {h=$6;m=$7}}} {print d+0,"days,",h+0,"hours,",m+0,"minutes."}' | cut -d "," -f2 | cut -d " " -f2)
+        if [ $h -gt 0 ]; then
+            echo Rebooting by hours
             reboot
         else
-            Not rebooting, waiting minutes...
+            # Reading minutes uptime
+            m=$(uptime | awk -F'( |,|:)+' '{d=h=m=0; if ($7=="min") m=$6; else {if ($7~/^day/) {d=$6;h=$8;m=$9} else {h=$6;m=$7}}} {print d+0,"days,",h+0,"hours,",m+0,"minutes."}' | cut -d "," -f3 | cut -d " " -f2)
+            if [ $m -gt 15 ]; then
+                echo Rebooting by minutes
+                reboot
+            else
+                Not rebooting, waiting...
+            fi
         fi
     fi
 fi
